@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; script-src 'self' 'unsafe-inline'; img-src 'self' data: content:;">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <title>Hello World</title>
+    </head>
+    <body>
+        <div class="app">
+            <h1>Apache Cordova</h1>
+            <div>
+                <img id="photo" src="img/logo.png" alt="logo" />
+                <p id="desc"></p>
+                <button id="btn" style="background:red; color:white; padding:12px;">Take a photo</button>
+            </div>
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script>
+            let app = {
+                init: function(){
+                    document.getElementById('btn').addEventListener('click',app.takephoto);
+                },
+                takephoto: function(){
+                    let opts={
+                        quality:80,
+                        destinationType: Camera.DestinationType.FILE_URI,
+                        sourceType: Camera.PictureSourceType.CAMERA,
+                        mediaType: Camera.MediaType.PICTURE,
+                        encodingType: Camera.EncodingType.JPEG,
+                        cameraDirection: Camera.Direction.BACK,
+                        targetWidth:300,
+                        targetHeight:400
+                    };
+
+                    navigator.camera.getPicture(app.ftw,app.wtf,opts);
+                },
+                ftw: function(imgURI){
+                    document.getElementById('desc').textContent = imgURI;
+                    document.getElementById('photo').src = imgURI;
+                },
+                wtf: function(){
+                    document.getElementById('desc').textContent= "hata!";
+                }
+
+            };
+
+
+            document.addEventListener('deviceready',app.init);
+        </script>
+    </body>
+</html>
